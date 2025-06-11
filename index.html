@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBBS Aggregate Calculator</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .input-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        input {
+            width: 120px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .max-marks {
+            margin-left: 10px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            flex: 1;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+        }
+        
+        #resetBtn {
+            background-color: #6c757d;
+        }
+        
+        #resetBtn:hover {
+            background-color: #5a6268;
+        }
+        
+        .results {
+            margin-top: 30px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+            display: none;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 12px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .result-label {
+            font-weight: 500;
+        }
+        
+        .result-value {
+            font-weight: 600;
+        }
+        
+        .total-aggregate {
+            background-color: #e9f5ff;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .error {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            input {
+                width: 100px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MBBS Aggregate Calculator</h1>
+        <p class="subtitle">Created by Dr Shah Zeb</p>
+        
+        <div class="form-group">
+            <label for="firstYear">1st Year Marks</label>
+            <div class="input-container">
+                <input type="number" id="firstYear" min="0" max="600" placeholder="Marks">
+                <span class="max-marks">/ 600</span>
+            </div>
+            <div id="firstYearError" class="error">Marks cannot exceed 600</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="secondYear">2nd Year Marks</label>
+            <div class="input-container">
+                <input type="number" id="secondYear" min="0" max="700" placeholder="Marks">
+                <span class="max-marks">/ 700</span>
+            </div>
+            <div id="secondYearError" class="error">Marks cannot exceed 700</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="thirdYear">3rd Year Marks</label>
+            <div class="input-container">
+                <input type="number" id="thirdYear" min="0" max="800" placeholder="Marks">
+                <span class="max-marks">/ 800</span>
+            </div>
+            <div id="thirdYearError" class="error">Marks cannot exceed 800</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="fourthYear">4th Year Marks</label>
+            <div class="input-container">
+                <input type="number" id="fourthYear" min="0" max="1000" placeholder="Marks">
+                <span class="max-marks">/ 1000</span>
+            </div>
+            <div id="fourthYearError" class="error">Marks cannot exceed 1000</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="finalYear">Final Year Marks</label>
+            <div class="input-container">
+                <input type="number" id="finalYear" min="0" max="1600" placeholder="Marks">
+                <span class="max-marks">/ 1600</span>
+            </div>
+            <div id="finalYearError" class="error">Marks cannot exceed 1600</div>
+        </div>
+        
+        <div class="form-group">
+            <label for="testMarks">Induction Test Marks</label>
+            <div class="input-container">
+                <input type="number" id="testMarks" min="0" max="100" placeholder="Marks">
+                <span class="max-marks">/ 100</span>
+            </div>
+            <div id="testMarksError" class="error">Marks cannot exceed 100</div>
+        </div>
+        
+        <div class="button-group">
+            <button id="calculateBtn">Calculate Aggregate</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+        
+        <div id="results" class="results">
+            <h2>Calculation Results</h2>
+            
+            <div class="result-item">
+                <span class="result-label">1st Year Percentage:</span>
+                <span class="result-value" id="firstYearPct"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">2nd Year Percentage:</span>
+                <span class="result-value" id="secondYearPct"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">3rd Year Percentage:</span>
+                <span class="result-value" id="thirdYearPct"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">4th Year Percentage:</span>
+                <span class="result-value" id="fourthYearPct"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Final Year Percentage:</span>
+                <span class="result-value" id="finalYearPct"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Yearly Average Percentage:</span>
+                <span class="result-value" id="yearlyAvg"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">MBBS Aggregate (20% of Average):</span>
+                <span class="result-value" id="mbbsAgg"></span>
+            </div>
+            
+            <div class="result-item">
+                <span class="result-label">Test Aggregate (75% of Test Marks):</span>
+                <span class="result-value" id="testAgg"></span>
+            </div>
+            
+            <div class="total-aggregate">
+                <span class="result-label">TOTAL AGGREGATE:</span>
+                <span class="result-value" id="totalAgg"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            // Reset errors
+            document.querySelectorAll('.error').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Get input values
+            const firstYear = parseFloat(document.getElementById('firstYear').value) || 0;
+            const secondYear = parseFloat(document.getElementById('secondYear').value) || 0;
+            const thirdYear = parseFloat(document.getElementById('thirdYear').value) || 0;
+            const fourthYear = parseFloat(document.getElementById('fourthYear').value) || 0;
+            const finalYear = parseFloat(document.getElementById('finalYear').value) || 0;
+            const testMarks = parseFloat(document.getElementById('testMarks').value) || 0;
+            
+            // Validate inputs
+            let isValid = true;
+            
+            if (firstYear > 600) {
+                document.getElementById('firstYearError').style.display = 'block';
+                isValid = false;
+            }
+            if (secondYear > 700) {
+                document.getElementById('secondYearError').style.display = 'block';
+                isValid = false;
+            }
+            if (thirdYear > 800) {
+                document.getElementById('thirdYearError').style.display = 'block';
+                isValid = false;
+            }
+            if (fourthYear > 1000) {
+                document.getElementById('fourthYearError').style.display = 'block';
+                isValid = false;
+            }
+            if (finalYear > 1600) {
+                document.getElementById('finalYearError').style.display = 'block';
+                isValid = false;
+            }
+            if (testMarks > 100) {
+                document.getElementById('testMarksError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            // Step 1: Calculate yearly percentages
+            const firstYearPct = (firstYear / 600) * 100;
+            const secondYearPct = (secondYear / 700) * 100;
+            const thirdYearPct = (thirdYear / 800) * 100;
+            const fourthYearPct = (fourthYear / 1000) * 100;
+            const finalYearPct = (finalYear / 1600) * 100;
+            
+            // Step 2: Calculate MBBS aggregate
+            const yearlyAvg = (firstYearPct + secondYearPct + thirdYearPct + fourthYearPct + finalYearPct) / 5;
+            const mbbsAgg = yearlyAvg * 0.2;
+            
+            // Step 3: Calculate test aggregate
+            const testAgg = testMarks * 0.75;
+            
+            // Step 4: Calculate total aggregate
+            const totalAgg = mbbsAgg + testAgg;
+            
+            // Display results
+            document.getElementById('firstYearPct').textContent = firstYearPct.toFixed(2) + '%';
+            document.getElementById('secondYearPct').textContent = secondYearPct.toFixed(2) + '%';
+            document.getElementById('thirdYearPct').textContent = thirdYearPct.toFixed(2) + '%';
+            document.getElementById('fourthYearPct').textContent = fourthYearPct.toFixed(2) + '%';
+            document.getElementById('finalYearPct').textContent = finalYearPct.toFixed(2) + '%';
+            document.getElementById('yearlyAvg').textContent = yearlyAvg.toFixed(2) + '%';
+            document.getElementById('mbbsAgg').textContent = mbbsAgg.toFixed(2) + '%';
+            document.getElementById('testAgg').textContent = testAgg.toFixed(2) + '%';
+            document.getElementById('totalAgg').textContent = totalAgg.toFixed(2) + '%';
+            
+            document.getElementById('results').style.display = 'block';
+        });
+
+        // Reset button functionality
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            // Clear all input fields
+            document.querySelectorAll('input').forEach(input => {
+                input.value = '';
+            });
+            
+            // Hide all error messages
+            document.querySelectorAll('.error').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Hide results section
+            document.getElementById('results').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
